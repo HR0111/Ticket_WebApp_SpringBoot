@@ -4,6 +4,7 @@ package com.hemant.tickets.config;
 import com.hemant.tickets.filters.UserProvisioningFilter;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,7 +19,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http , UserProvisioningFilter userProvisioningFilter) throws Exception {
 
         http.authorizeHttpRequests( authorize->
-                        authorize.anyRequest().authenticated())
+                        authorize
+                                .requestMatchers(HttpMethod.GET , "/api/v1/published-events" ).permitAll()
+
+                        .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth2->oauth2.jwt(Customizer.withDefaults()))

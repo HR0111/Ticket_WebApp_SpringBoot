@@ -1,5 +1,6 @@
 package com.hemant.tickets.services.impl;
 
+import com.hemant.tickets.domains.EventStatusEnum;
 import com.hemant.tickets.entity.*;
 import com.hemant.tickets.exceptions.EventNotFoundException;
 import com.hemant.tickets.exceptions.EventUpdateException;
@@ -142,6 +143,15 @@ public class EventServiceImpl implements EventService {
         getEventForOrganizer(organizerId, id).ifPresent(eventRepository::delete);
     }
 
+    @Override
+    public Page<Event> listPublishedEvents(Pageable pageable) {
+        return eventRepository.findByStatus(EventStatusEnum.PUBLISHED, pageable);
+    }
+
+    @Override
+    public Page<Event> searchPublishedEvents(String query, Pageable pageable) {
+        return eventRepository.searchEvents(query,pageable);
+    }
 
 
 }

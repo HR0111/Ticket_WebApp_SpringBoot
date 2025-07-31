@@ -3,7 +3,6 @@ package com.hemant.tickets.mappers;
 
 import com.hemant.tickets.dto.*;
 import com.hemant.tickets.entity.*;
-import com.hemant.tickets.exceptions.CreateEventException;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -31,4 +30,7 @@ public interface EventMapper {
     UpdateEventResponseDto  toUpdateEventResponseDto(Event event);
 
     UpdateEventRequest fromDto(UpdateEventRequestDto updateEventRequestDto);
+
+    ListPublishedEventResponseDto toListPublishedEventResponseDto(Event event);
+
 }
