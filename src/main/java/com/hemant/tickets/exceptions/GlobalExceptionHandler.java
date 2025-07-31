@@ -19,6 +19,16 @@ import java.util.Optional;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(QrCodeGenerationException.class)
+    public ResponseEntity<ErrorDto> handleQrCodeGenerationException(QrCodeGenerationException ex){
+        log.info("Caught QrCodeGenerationException" , ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("Unable to generate QrCode");
+        return new ResponseEntity<>(errorDto , HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
+
     @ExceptionHandler(EventUpdateException.class)
     public ResponseEntity<ErrorDto> handleEventUpdateException(EventUpdateException ex){
         log.info("Caught EventUpdateException" , ex);
