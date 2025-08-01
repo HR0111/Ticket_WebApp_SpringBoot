@@ -9,9 +9,12 @@ import com.hemant.tickets.domains.QrCodeStatusEnum;
 import com.hemant.tickets.entity.QrCode;
 import com.hemant.tickets.entity.Ticket;
 import com.hemant.tickets.exceptions.QrCodeGenerationException;
+import com.hemant.tickets.exceptions.QrCodeNotFoundException;
 import com.hemant.tickets.repositories.QrCodeRepository;
 import com.hemant.tickets.services.QrCodeService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -28,6 +31,7 @@ public class QrCodeServiceImpl implements QrCodeService {
 
     private static final int QR_HEIGHT = 300;
     private static final int QR_WIDTH = 300;
+    private static final Logger log = LoggerFactory.getLogger(QrCodeServiceImpl.class);
 
     private final QrCodeRepository qrCodeRepository;
     private final QRCodeWriter qrCodeWriter;
@@ -49,6 +53,20 @@ public class QrCodeServiceImpl implements QrCodeService {
 
         }catch (IOException | WriterException ex){
             throw new QrCodeGenerationException("Failed to generate QR Code " , ex);
+        }
+
+    }
+
+    @Override
+    public byte[] getQrCodeImageForUserAndTicket(UUID userId, UUID ticketId) {
+        QrCode qrCode = qrCodeRepository.findByTicketIdAndTicketPurchaserId(ticketId, userId)
+                .orElseThrow(QrCodeNotFoundException::new);
+
+        try{
+            return Base64.getDecoder().decode(qrCode.getValue());
+        }catch (IllegalArgumentException ex){
+            log.info("Invalid base64 Qr Code for the ticket Id {}",ticketId , ex);
+            throw new QrCodeNotFoundException();
         }
 
     }

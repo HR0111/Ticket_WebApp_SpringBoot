@@ -7,6 +7,7 @@ import com.hemant.tickets.entity.Event;
 import com.hemant.tickets.entity.UpdateEventRequest;
 import com.hemant.tickets.mappers.EventMapper;
 import com.hemant.tickets.services.EventService;
+import com.hemant.tickets.util.JwtUtil;
 import jakarta.validation.Valid;
 import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import static com.hemant.tickets.util.JwtUtil.parseUserId;
 
 @RestController
 @RequestMapping("/api/v1/events")
@@ -96,9 +99,6 @@ public class EventController {
 
 
 
-    private UUID parseUserId(Jwt jwt){
-        return UUID.fromString(jwt.getSubject());
-    }
 
 
 

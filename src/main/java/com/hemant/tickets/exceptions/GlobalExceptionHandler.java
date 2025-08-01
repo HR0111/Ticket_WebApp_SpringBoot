@@ -19,6 +19,23 @@ import java.util.Optional;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(QrCodeNotFoundException.class)
+    public ResponseEntity<ErrorDto> handleQrCodeNotFoundException(QrCodeNotFoundException ex){
+        log.info("Caught QrCodeNotFoundException" , ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("QrCodeNotFoundException QrCode Not Found");
+        return new ResponseEntity<>(errorDto , HttpStatus.BAD_REQUEST);
+
+    }
+    @ExceptionHandler(TicketSoldOutException.class)
+    public ResponseEntity<ErrorDto> handleTicketSoldOutException(TicketSoldOutException ex){
+        log.info("Caught TicketSoldOutException" , ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("Ticket Sold Out!");
+        return new ResponseEntity<>(errorDto , HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
     @ExceptionHandler(QrCodeGenerationException.class)
     public ResponseEntity<ErrorDto> handleQrCodeGenerationException(QrCodeGenerationException ex){
         log.info("Caught QrCodeGenerationException" , ex);
